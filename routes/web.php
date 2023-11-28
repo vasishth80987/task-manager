@@ -24,3 +24,9 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 require __DIR__.'/auth.php';
+
+
+Route::resource('user', App\Http\Controllers\UserController::class);
+
+Route::get('task/save', [App\Http\Controllers\TaskController::class, 'save']);
+Route::resource('task', App\Http\Controllers\TaskController::class)->except('store', 'update', 'destroy');
