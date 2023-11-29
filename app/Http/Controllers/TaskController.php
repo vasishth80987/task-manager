@@ -3,19 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TaskDataTable;
-use App\Http\Requests\TaskSaveRequest;
+use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskUpdateRequest;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use Masmerise\Toaster\Toast;
-use Masmerise\Toaster\Toastable;
 
 class TaskController extends Controller
 {
-    use Toastable;
-
     public function index(TaskDataTable $dataTable)
     {
         return $dataTable->render('task.index');
@@ -23,20 +20,16 @@ class TaskController extends Controller
 
     public function create(Request $request): View
     {
-        $task = new Task();
-        return view('task.create',compact('task'));
+        return view('task.create');
     }
 
-    public function edit(Request $request, Task $task): View
+    public function store(TaskStoreRequest $request): RedirectResponse
     {
-        return view('task.edit', compact('task'));
-    }
+        $task = Task::create($request->validated());
 
-    public function save(TaskSaveRequest $request, Task $task): RedirectResponse
-    {
-        $task->save();
+        $request->session()->flash('task.id', $task->id);
 
-        return redirect()->route('task.show', ['task' => $task]);
+        return redirect()->route('task.index');
     }
 
     public function show(Request $request, Task $task): View
@@ -44,19 +37,30 @@ class TaskController extends Controller
         return view('task.show', compact('task'));
     }
 
-    public function destroy(Task $task)
+    public function edit(Request $request, Task $task): View
     {
-        // Optional: Check if the user is authorized to delete the task
-        // $this->authorize('delete', $task);
+        return view('task.edit', compact('task'));
+    }
 
+    public function update(TaskUpdateRequest $request, Task $task): RedirectResponse
+    {
+        $task->update($request->validated());
+
+        $request->session()->flash('task.id', $task->id);
+
+        return redirect()->route('task.index');
+    }
+
+    public function destroy(Request $request, Task $task): RedirectResponse
+    {
         try {
             $task->delete();
             $this->success('Task Deleted');
+            Log::channel('app')->notice('Deleted Task:{id}', ['id' => $task->id]);
             return redirect()->route('task.index')
                 ->with('success', 'Task deleted successfully');
         } catch (\Exception $e) {
-            // Handle the exception if the task can't be deleted
-            // Log the error or handle it as needed
+            Log::debug('An error occurred while deleting task. '.$e->getMessage());
             return redirect()->route('task.index')
                 ->with('error', 'Error deleting task');
         }

@@ -5,16 +5,16 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\App\Models\User;
-use App\Models\Task;
+use App\Models\Team;
 
-class TaskFactory extends Factory
+class TeamFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Task::class;
+    protected $model = Team::class;
 
     /**
      * Define the model's default state.
@@ -22,11 +22,7 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(4),
-            'description' => $this->faker->text(),
-            'creation_date' => $this->faker->dateTime(),
-            'completion' => $this->faker->boolean(),
-            'user:owner_id' => App\Models\User::factory(),
+            'team_lead_id' => \App\Models\User::factory(),
         ];
     }
 }

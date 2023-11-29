@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use App\Models\Task;
 use Masmerise\Toaster\Toaster;
@@ -20,7 +21,7 @@ class TaskForm extends Component
 
     protected $rules = [
         'title' => 'required|string|max:255',
-        'description' => 'nullable|string'
+        'description' => 'required|string'
     ];
 
     public function mount(Task $task = null)
@@ -39,24 +40,37 @@ class TaskForm extends Component
 
     public function save()
     {
-        $this->validate();
+        try{
+            $this->validate();
+            $this->sanitize();
 
-        if(!$this->owner_id->first()){
-            $this->owner_id = auth()->id();
-            $this->owner = auth()->user()->get('name');
+            if(!$this->owner_id->first()){
+                $this->owner_id = auth()->id();
+                $this->owner = auth()->user()->get('name');
+            }
+
+            $task = Task::updateOrCreate(['id' => $this->taskId], [
+                'title' => $this->title,
+                'description' => $this->description,
+                'completion' => $this->completion ?? 0,
+                'owner_id' => $this->owner_id->first()
+            ]);
+
+            $task->assignedTo()->sync($this->assignees);
+
+            $this->dispatch('taskSaved');
+            Toaster::success('Task Saved!');
+            Log::channel('app')->notice('Updated Task:{id}', ['id' => $task->id]);
         }
+        catch(\Exception $e){
+            Log::debug('An error occurred while saving task. '.$e->getMessage());
+        }
+    }
 
-        $task = Task::updateOrCreate(['id' => $this->taskId], [
-            'title' => $this->title,
-            'description' => $this->description,
-            'completion' => $this->completion ?? 0,
-            'owner_id' => $this->owner_id->first()
-        ]);
-
-        $task->assignedTo()->sync($this->assignees);
-
-        $this->dispatch('taskSaved');
-        Toaster::success('Task Saved!');
+    public function sanitize()
+    {
+        $this->title = filter_var($this->title, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $this->description = filter_var($this->description, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
     }
 
     public function render()

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaskSaveRequest extends FormRequest
+class TeamStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,8 +20,7 @@ class TaskSaveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:400'],
-            'description' => ['required', 'string'],
+            'user:team_lead_id' => ['required', 'integer', 'exists:App\Models\Users,id'],
         ];
     }
 }

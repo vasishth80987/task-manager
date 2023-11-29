@@ -19,6 +19,12 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    #create api token for user
+    Route::post('/api/login', function (\Illuminate\Support\Facades\Request $request) {
+        $token = auth()->user()->createToken('apiToken');
+        return view('api', compact('token'));
+    });
+
     Route::view('dashboard', 'dashboard')
         ->name('dashboard');
 
@@ -32,3 +38,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 });
+
+
+
+
+
+
+
+Route::resource('user', App\Http\Controllers\UserController::class)->only('store', 'update');
+
+Route::resource('task', App\Http\Controllers\TaskController::class)->only('store', 'update');
+
+
+Route::resource('user', App\Http\Controllers\UserController::class);
+
+Route::resource('task', App\Http\Controllers\TaskController::class);
+
+Route::resource('team', App\Http\Controllers\TeamController::class);

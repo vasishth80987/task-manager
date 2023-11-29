@@ -1,0 +1,72 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    "Find a single user by an identifying attribute."
+    user(
+      "Search by primary key."
+      id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+
+      "Search by email address."
+      email: String @eq @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    ): User @find
+
+    "List multiple users."
+    users(
+      "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+      name: String @where(operator: "like")
+    ): [User!]! @paginate(defaultCount: 10)
+}
+
+"Account of a person who utilizes this application."
+type User {
+    "Unique primary key."
+    id: ID!
+
+    "Non-unique name."
+    name: String!
+
+    "Unique email address."
+    email: String!
+
+    "When the email was verified."
+    email_verified_at: DateTime
+
+    "When the account was created."
+    created_at: DateTime!
+
+    "When the account was last updated."
+    updated_at: DateTime!
+}
+
+type Task {
+    id: ID!
+    title: String!
+    description: String
+    completed: Boolean
+    # Add other fields as necessary
+}
+
+type Query {
+    tasks: [Task!]! @all
+    task(id: ID @eq): Task @find
+}
+
+type Mutation {
+    createTask(input: CreateTaskInput!): Task @create
+    updateTask(id: ID!, input: UpdateTaskInput!): Task @update
+    deleteTask(id: ID!): Task @delete
+}
+
+input CreateTaskInput {
+    title: String!
+    description: String
+    completed: Boolean
+}
+
+input UpdateTaskInput {
+    title: String
+    description: String
+    completed: Boolean
+}

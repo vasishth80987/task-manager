@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\App\Models\User;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use JMac\Testing\Traits\AdditionalAssertions;
@@ -33,13 +33,62 @@ final class TaskControllerTest extends TestCase
     #[Test]
     public function create_displays_view(): void
     {
-        $task = User::factory()->create();
-
         $response = $this->get(route('task.create'));
 
         $response->assertOk();
         $response->assertViewIs('task.create');
-        $response->assertViewHas('user');
+    }
+
+
+    #[Test]
+    public function store_uses_form_request_validation(): void
+    {
+        $this->assertActionUsesFormRequest(
+            \App\Http\Controllers\TaskController::class,
+            'store',
+            \App\Http\Requests\TaskStoreRequest::class
+        );
+    }
+
+    #[Test]
+    public function store_saves_and_redirects(): void
+    {
+        $title = $this->faker->sentence(4);
+        $description = $this->faker->text();
+        $completion = $this->faker->boolean();
+        $user:owner = App\Models\User::factory()->create();
+
+        $response = $this->post(route('task.store'), [
+            'title' => $title,
+            'description' => $description,
+            'completion' => $completion,
+            'user:owner_id' => $user:owner->id,
+        ]);
+
+        $tasks = Task::query()
+            ->where('title', $title)
+            ->where('description', $description)
+            ->where('completion', $completion)
+            ->where('user:owner_id', $user:owner->id)
+            ->get();
+        $this->assertCount(1, $tasks);
+        $task = $tasks->first();
+
+        $response->assertRedirect(route('task.index'));
+        $response->assertSessionHas('task.id', $task->id);
+    }
+
+
+    #[Test]
+    public function show_displays_view(): void
+    {
+        $task = Task::factory()->create();
+
+        $response = $this->get(route('task.show', $task));
+
+        $response->assertOk();
+        $response->assertViewIs('task.show');
+        $response->assertViewHas('task');
     }
 
 
@@ -57,46 +106,52 @@ final class TaskControllerTest extends TestCase
 
 
     #[Test]
-    public function save_uses_form_request_validation(): void
+    public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
             \App\Http\Controllers\TaskController::class,
-            'save',
-            \App\Http\Requests\TaskSaveRequest::class
+            'update',
+            \App\Http\Requests\TaskUpdateRequest::class
         );
     }
 
     #[Test]
-    public function save_saves_and_redirects(): void
+    public function update_redirects(): void
     {
+        $task = Task::factory()->create();
         $title = $this->faker->sentence(4);
         $description = $this->faker->text();
+        $completion = $this->faker->boolean();
+        $user:owner = App\Models\User::factory()->create();
 
-        $response = $this->get(route('task.save'), [
+        $response = $this->put(route('task.update', $task), [
             'title' => $title,
             'description' => $description,
+            'completion' => $completion,
+            'user:owner_id' => $user:owner->id,
         ]);
 
-        $tasks = Task::query()
-            ->where('title', $title)
-            ->where('description', $description)
-            ->get();
-        $this->assertCount(1, $tasks);
-        $task = $tasks->first();
+        $task->refresh();
 
-        $response->assertRedirect(route('task.show', ['task' => $task]));
+        $response->assertRedirect(route('task.index'));
+        $response->assertSessionHas('task.id', $task->id);
+
+        $this->assertEquals($title, $task->title);
+        $this->assertEquals($description, $task->description);
+        $this->assertEquals($completion, $task->completion);
+        $this->assertEquals($user:owner->id, $task->user:owner_id);
     }
 
 
     #[Test]
-    public function show_displays_view(): void
+    public function destroy_deletes_and_redirects(): void
     {
         $task = Task::factory()->create();
 
-        $response = $this->get(route('task.show', $task));
+        $response = $this->delete(route('task.destroy', $task));
 
-        $response->assertOk();
-        $response->assertViewIs('task.show');
-        $response->assertViewHas('task');
+        $response->assertRedirect(route('task.index'));
+
+        $this->assertModelMissing($task);
     }
 }
