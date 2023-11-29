@@ -26,9 +26,3 @@
         </div>
     </div>
 </x-app-layout>
-
-    <div class="p-4">
-        <h3 class="text-lg font-bold">Title</h3>
-        <p class="text-sm text-gray-600">Description goes here.</p>
-    </div>
-</a>

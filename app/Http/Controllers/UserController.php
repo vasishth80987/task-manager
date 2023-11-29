@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\UsersDataTable;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
@@ -11,12 +12,18 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index(Request $request): View
+//    public function index(Request $request): View
+//    {
+//        $users = User::all();
+//
+//        return view('user.index', compact('users'));
+//    }
+    public function index(UsersDataTable $dataTable)
     {
         $users = User::all();
-
-        return view('user.index', compact('users'));
+        return $dataTable->render('user.index', compact('users'));
     }
+
 
     public function create(Request $request): View
     {

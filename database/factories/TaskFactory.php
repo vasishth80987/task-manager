@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use App\Models\App\Models\User;
 use App\Models\Task;
 
 class TaskFactory extends Factory
@@ -25,6 +26,7 @@ class TaskFactory extends Factory
             'description' => $this->faker->text(),
             'creation_date' => $this->faker->dateTime(),
             'completion' => $this->faker->boolean(),
+            'owner_id' => \App\Models\User::factory(),
         ];
     }
 }

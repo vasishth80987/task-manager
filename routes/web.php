@@ -15,18 +15,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
-
 require __DIR__.'/auth.php';
 
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::resource('user', App\Http\Controllers\UserController::class);
+    Route::view('dashboard', 'dashboard')
+        ->name('dashboard');
 
-Route::get('task/save', [App\Http\Controllers\TaskController::class, 'save']);
-Route::resource('task', App\Http\Controllers\TaskController::class)->except('store', 'update', 'destroy');
+    Route::view('profile', 'profile')
+        ->name('profile');
+
+    Route::resource('user', App\Http\Controllers\UserController::class);
+
+    Route::get('task/save', [App\Http\Controllers\TaskController::class, 'save']);
+    Route::resource('task', App\Http\Controllers\TaskController::class);
+
+    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+});

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->longText('description');
             $table->timestamp('creation_date')->nullable();
             $table->boolean('completion')->default(False);
+            $table->foreignId('owner_id');
             $table->timestamps();
         });
     }
