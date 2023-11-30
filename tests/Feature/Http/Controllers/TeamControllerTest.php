@@ -53,14 +53,14 @@ final class TeamControllerTest extends TestCase
     #[Test]
     public function store_saves_and_redirects(): void
     {
-        $user:team_lead = App\Models\User::factory()->create();
+        $team_lead = App\Models\User::factory()->create();
 
         $response = $this->post(route('team.store'), [
-            'user:team_lead_id' => $user:team_lead->id,
+            'team_lead_id' => $team_lead->id,
         ]);
 
         $teams = Team::query()
-            ->where('user:team_lead_id', $user:team_lead->id)
+            ->where('team_lead_id', $team_lead->id)
             ->get();
         $this->assertCount(1, $teams);
         $team = $teams->first();
@@ -110,10 +110,10 @@ final class TeamControllerTest extends TestCase
     public function update_redirects(): void
     {
         $team = Team::factory()->create();
-        $user:team_lead = App\Models\User::factory()->create();
+        $team_lead = App\Models\User::factory()->create();
 
         $response = $this->put(route('team.update', $team), [
-            'user:team_lead_id' => $user:team_lead->id,
+            'team_lead_id' => $team_lead->id,
         ]);
 
         $team->refresh();
@@ -121,7 +121,7 @@ final class TeamControllerTest extends TestCase
         $response->assertRedirect(route('team.index'));
         $response->assertSessionHas('team.id', $team->id);
 
-        $this->assertEquals($user:team_lead->id, $team->user:team_lead_id);
+        $this->assertEquals($team_lead->id, $team->team_lead_id);
     }
 
 

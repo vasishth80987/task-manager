@@ -11,32 +11,53 @@ class Team extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'user:team_lead_id',
+        'team_lead_id',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'id' => 'integer',
-        'user:team_lead_id' => 'integer',
+        'team_lead_id' => 'integer',
     ];
 
+    // Attributes that should be treated as dates
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    // Date format for the model's date fields
+    protected $dateFormat = 'Y-m-d H:i:s';
+
+    /**
+     * Relationship to the User model (team lead of the team).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function teamLead(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(\App\Models\User::class, 'team_lead_id');
     }
 
+    /**
+     * Relationship to the User model (users that are team members).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function teamMembers(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\User::class, 'teamMembers');
+    }
+
+    /**
+     * Model event for deleting a team.
+     * Detaches all members when a team is deleted.
+     */
+    protected static function booted()
+    {
+        static::deleting(function (Team $team) {
+            // Detach all team members before deleting the team
+            $team->teamMembers()->detach();
+        });
     }
 }

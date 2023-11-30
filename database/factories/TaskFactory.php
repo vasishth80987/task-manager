@@ -26,7 +26,7 @@ class TaskFactory extends Factory
             'description' => $this->faker->text(),
             'creation_date' => $this->faker->dateTime(),
             'completion' => $this->faker->boolean(),
-            'user:owner_id' => App\Models\User::factory(),
+            'owner_id' => \App\Models\User::factory(),
         ];
     }
 }

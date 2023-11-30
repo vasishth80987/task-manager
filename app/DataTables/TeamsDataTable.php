@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Task;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class TaskDataTable extends DataTable
+class TeamsDataTable extends DataTable
 {
     public $table_query = null;
     /**
@@ -23,14 +23,11 @@ class TaskDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('owner', function (Task $task) {
-                return $task->owner->name ?? '-';
+            ->addColumn('team_role', function ($team) {
+                return $team->team_lead_id==auth()->id() ? 'Manager':'Developer';
             })
-            ->addColumn('assigned_to', function (Task $task) {
-                return $task->assignedTo->pluck('name')->join(', ');
-            })
-            ->addColumn('action', function ($task) {
-                return view('task.datatables_actions', ['id' => $task->id])->render();
+            ->addColumn('action', function ($team) {
+                return view('team.datatables_actions', ['id' => $team->id])->render();
             })
             ->editColumn('created_at', function($model){
                 $formatDate = date('Y-m-d H:i:s',strtotime($model->created_at));
@@ -48,7 +45,7 @@ class TaskDataTable extends DataTable
      */
     public function setQuery(array $ids)
     {
-        $query = Task::whereIn('id',$ids);
+        $query = Team::whereIn('id',$ids);
         $this->table_query = $query;
 
     }
@@ -56,7 +53,7 @@ class TaskDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
-    public function query(Task $model): QueryBuilder
+    public function query(Team $model): QueryBuilder
     {
         return $this->table_query ?? $model->newQuery();
     }
@@ -67,18 +64,18 @@ class TaskDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('task-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        'excel',
-                        'csv',
-                        'print',
-                        'reload'
-                    ]);
+            ->setTableId('task-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                'excel',
+                'csv',
+                'print',
+                'reload'
+            ]);
     }
 
     /**
@@ -88,9 +85,7 @@ class TaskDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('title'),
-            Column::make('description'),
-            Column::make('completion'),
+            Column::computed('team_role'),
             Column::make('created_at'),
             Column::make('updated_at'),
             Column::computed('action')
@@ -106,6 +101,6 @@ class TaskDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Task_' . date('YmdHis');
+        return 'Teams_' . date('YmdHis');
     }
 }

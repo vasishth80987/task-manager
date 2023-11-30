@@ -56,20 +56,20 @@ final class TaskControllerTest extends TestCase
         $title = $this->faker->sentence(4);
         $description = $this->faker->text();
         $completion = $this->faker->boolean();
-        $user:owner = App\Models\User::factory()->create();
+        $owner = App\Models\User::factory()->create();
 
         $response = $this->post(route('task.store'), [
             'title' => $title,
             'description' => $description,
             'completion' => $completion,
-            'user:owner_id' => $user:owner->id,
+            'owner_id' => $owner->id,
         ]);
 
         $tasks = Task::query()
             ->where('title', $title)
             ->where('description', $description)
             ->where('completion', $completion)
-            ->where('user:owner_id', $user:owner->id)
+            ->where('owner_id', $owner->id)
             ->get();
         $this->assertCount(1, $tasks);
         $task = $tasks->first();
@@ -122,13 +122,13 @@ final class TaskControllerTest extends TestCase
         $title = $this->faker->sentence(4);
         $description = $this->faker->text();
         $completion = $this->faker->boolean();
-        $user:owner = App\Models\User::factory()->create();
+        $owner = App\Models\User::factory()->create();
 
         $response = $this->put(route('task.update', $task), [
             'title' => $title,
             'description' => $description,
             'completion' => $completion,
-            'user:owner_id' => $user:owner->id,
+            'owner_id' => $owner->id,
         ]);
 
         $task->refresh();
@@ -139,7 +139,7 @@ final class TaskControllerTest extends TestCase
         $this->assertEquals($title, $task->title);
         $this->assertEquals($description, $task->description);
         $this->assertEquals($completion, $task->completion);
-        $this->assertEquals($user:owner->id, $task->user:owner_id);
+        $this->assertEquals($owner->id, $task->owner_id);
     }
 
 

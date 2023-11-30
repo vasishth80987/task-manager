@@ -2,16 +2,14 @@
 
 ## Overview
 
-This Laravel application provides a RESTful API for task management. It allows for creating, retrieving, updating, and deleting tasks. This API is built using Laravel's powerful MVC architecture and follows REST principles.
-
 ## Features
 
 - CRUD operations for tasks:
-  - Create new tasks
-  - Retrieve all tasks
-  - Retrieve a single task by ID
-  - Update existing tasks
-  - Delete tasks
+    - Create new tasks
+    - Retrieve all tasks
+    - Retrieve a single task by ID
+    - Update existing tasks
+    - Delete tasks
 
 ## Getting Started
 
@@ -24,7 +22,7 @@ This Laravel application provides a RESTful API for task management. It allows f
 ### Installation
 
 1. **Clone the Repository**
-
+   
    ```bash
    git clone https://github.com/vasishth80987/task-manager.git
    cd task-manager
@@ -53,4 +51,3 @@ This Laravel application provides a RESTful API for task management. It allows f
 
    ```bash
    php artisan serve
-   

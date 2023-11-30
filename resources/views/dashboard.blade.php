@@ -16,6 +16,13 @@
                 </div>
             </a>
             @endrole
+            <a href="/team" class="block hover:bg-gray-200 text-decoration-none">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        {{ __("Teams") }}
+                    </div>
+                </div>
+            </a>
             <a href="/task" class="block hover:bg-gray-200 text-decoration-none">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -25,8 +32,8 @@
             </a>
             <form action="/api/login" method="POST" class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 @csrf
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <button type="submit">
+                <div>
+                    <button type="submit"  class="w-full text-left p-6 text-gray-900 dark:text-gray-100">
                         {{ __("Access API") }}
                     </button>
                 </div>

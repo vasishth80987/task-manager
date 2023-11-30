@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,45 +14,73 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Mass assignable attributes
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Attributes hidden from array/json serialization
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    // Attribute type casting
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
+    // Date attributes
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    // Date format for the model
+    protected $dateFormat = 'Y-m-d H:i:s';
+
+    // Relationship: User owns multiple tasks
     public function owns(): HasMany
     {
-        return $this->hasMany(\App\Models\Task::class);
+        return $this->hasMany(\App\Models\Task::class, 'owner_id');
     }
 
+    // Relationship: User assigned to multiple tasks
     public function assigned(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Task::class, 'assignedTo');
     }
 
+    // Relationship: User leads multiple teams
+    public function leads(): HasMany
+    {
+        return $this->hasMany(\App\Models\Team::class, 'team_lead_id');
+    }
+
+    // Relationship: User belongs to multiple teams
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Team::class, 'teamMembers');
+    }
+
+    // Model event: Handle related records before deleting a user
+    protected static function booted()
+    {
+        static::deleting(function (User $user) {
+            // Delete tasks owned by the user
+            foreach ($user->owns as $task) {
+                $task->delete();
+            }
+            // Delete teams led by the user
+            foreach ($user->leads as $team) {
+                $team->delete();
+            }
+            // Detach from assigned tasks and teams
+            $user->assigned()->detach();
+            $user->teams()->detach();
+        });
+    }
 }

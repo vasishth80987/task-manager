@@ -12,8 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
          \App\Models\User::factory()->create([
              'id' => 1,
              'name' => 'Admin User',
@@ -23,14 +21,38 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\User::factory()->create([
             'id' => 2,
-            'name' => 'Test User',
+            'name' => 'Team Manager 1',
             'password' => 'password',
-            'email' => 'test@example.com',
+            'email' => 'test1@example.com',
         ]);
+
+        \App\Models\User::factory()->create([
+            'id' => 3,
+            'name' => 'Team Manager 2',
+            'password' => 'password',
+            'email' => 'test2@example.com',
+        ]);
+
+        \App\Models\User::factory()->create([
+            'id' => 4,
+            'name' => 'Dev 1',
+            'password' => 'password',
+            'email' => 'test3@example.com',
+        ]);
+
+        \App\Models\User::factory()->create([
+            'id' => 5,
+            'name' => 'Dev 2',
+            'password' => 'password',
+            'email' => 'test4@example.com',
+        ]);
+
+        \App\Models\User::factory(10)->create();
 
         $this->call([
             PermissionSeeder::class,
             RoleSeeder::class,
+            TeamSeeder::class,
             TaskSeeder::class,
         ]);
     }

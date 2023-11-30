@@ -19,6 +19,9 @@
             .btn-secondary, .btn-primary{
                 color: #212529;
             }
+            .error{
+                color:red
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
@@ -38,6 +41,9 @@
             <main>
                 {{ $slot }}
             </main>
+            <div wire:loading>
+                Saving post...
+            </div>
         </div>
         <script
             src="https://code.jquery.com/jquery-3.7.1.min.js"
