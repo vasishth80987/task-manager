@@ -24,6 +24,10 @@
 - API endpoints:
     - RestAPI end points for all task operations(list,view,update,delete) can be accessed via '/api' suffix in url
     - Token based authentication using Laravel Sanctum Package
+- Front End:
+    - Blade Templates used for html markups
+    - Livewire components for displaying forms.
+    - Bootstrap CSS for styling
 - Feature Tests:
     - Pest Php feature tests(incomplete)
 
