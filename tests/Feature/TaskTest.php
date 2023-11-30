@@ -1,15 +1,16 @@
 <?php
-
-it('displays a list of tasks', function () {
+use function Pest\Laravel\{actingAs};
+it('display a list of tasks for admin', function () {
+    $this->artisan('db:seed');
     $user = \App\Models\User::factory()->create();
 
-    $user->assigned->attach();
     actingAs($user)
         ->get(route('task.index'))
         ->assertStatus(200);
 });
 it('displays a specific task', function () {
-    $user = \App\Models\User::factory()->create();
+    $this->artisan('db:seed');
+    $user = \App\Models\User::factory()->create()->assignRole('user');
     $task = \App\Models\Task::factory()->create();
 
     actingAs($user)
@@ -17,7 +18,9 @@ it('displays a specific task', function () {
         ->assertStatus(200);
 });
 it('deletes a specific task', function () {
-    $user = \App\Models\User::factory()->create();
+    $this->artisan('db:seed');
+
+    $user = \App\Models\User::factory()->create()->assignRole('manager');
     $task = \App\Models\Task::factory()->create();
 
     actingAs($user)
@@ -26,8 +29,9 @@ it('deletes a specific task', function () {
         ->assertSessionHasNoErrors();
 });
 it('prevents unauthorized access to create task', function () {
+    $this->artisan('db:seed');
     $nonAdminUser = \App\Models\User::factory()->create();
-
+    $nonAdminUser->assignRole('user');
     actingAs($nonAdminUser)
         ->post(route('task.store'), ['title' => 'Unauthorized Task'])
         ->assertStatus(403); // Forbidden status

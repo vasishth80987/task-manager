@@ -13,18 +13,6 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        Task::factory()->count(10)->create()->each(function(Task $task) {
-            $manager = User::role('manager')->get()->random(1)->first();
-            $task->owner()->associate($manager);
-            $assignees = collect();
-            foreach($manager->leads as $team){
-                $assignees = $assignees->merge($team->teamMembers()->get());
-            }
-            $count = rand(0,$assignees->unique('id')->count());
-            $task->assignedTo()->attach($assignees->unique('id')->random($count)->pluck('id'));
-            $task->save();
-        });
-
-
+        Task::factory()->count(10)->create();
     }
 }

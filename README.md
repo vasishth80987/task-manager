@@ -24,7 +24,7 @@
     - RestAPI end points for all task operations(list,view,update,delete) can be accessed via '/api' suffix in url
     - Token based authentication using Laravel Sanctum Package
 - Feature Tests:
-    - Pest Php feature tests included
+    - Pest Php feature tests(incomplete)
 
 ## Getting Started
 

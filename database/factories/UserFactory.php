@@ -45,10 +45,31 @@ class UserFactory extends Factory
      *
      * @return Factory
      */
-    public function roles(...$roles): UserFactory
+    public function manager(): UserFactory
     {
-        return $this->afterCreating(function (User $user) use ($roles){
-            $user->assignRole($roles);
+        return $this->afterCreating(fn(User $user) => $user->syncRoles('manager'));
+    }
+
+    /**
+     * Indicate the user is assigned a role
+     *
+     * @return Factory
+     */
+    public function admin(): UserFactory
+    {
+        return $this->afterCreating(fn(User $user) => $user->syncRoles('admin'));
+    }
+
+    /**
+     * Configure the model factory.
+     * Assign user as a default role to all created users
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterMaking(function (User $user) {
+            return $user->assignRole('user');
         });
     }
 }

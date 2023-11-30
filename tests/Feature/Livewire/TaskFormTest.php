@@ -15,8 +15,7 @@ it('validates task form fields', function () {
         ->assertHasErrors(['title' => 'required']);
 });
 it('creates a task', function () {
-    Livewire::actingAs($user)
-        ->test(\App\Livewire\TaskForm::class)
+    Livewire::test(\App\Livewire\TaskForm::class)
         ->set('title', 'New Task')
         ->set('description', 'New Task Description')
         ->call('save')
@@ -26,8 +25,7 @@ it('creates a task', function () {
 it('updates a task', function () {
     $task = \App\Models\Task::factory()->create();
 
-    Livewire::actingAs($user)
-        ->test(\App\Livewire\TaskForm::class, ['task' => $task])
+    Livewire::test(\App\Livewire\TaskForm::class, ['task' => $task])
         ->set('title', 'Updated Task Title')
         ->call('save')
         ->assertHasNoErrors()

@@ -21,21 +21,21 @@ class DatabaseSeeder extends Seeder
              'name' => 'Admin User',
              'password' => 'password',
              'email' => 'admin@example.com',
-         ])->admin();
+         ])->assignRole('admin');
 
         \App\Models\User::factory()->create([
             'id' => 2,
             'name' => 'Team Manager 1',
             'password' => 'password',
             'email' => 'manager1@example.com',
-        ])->manager();
+        ])->assignRole('manager');
 
         \App\Models\User::factory()->create([
             'id' => 3,
             'name' => 'Team Manager 2',
             'password' => 'password',
             'email' => 'manager2@example.com',
-        ])->manager();
+        ])->assignRole('manager');
 
         \App\Models\User::factory()->create([
             'id' => 4,
