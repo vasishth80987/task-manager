@@ -26,5 +26,31 @@ This Laravel application provides a RESTful API for task management. It allows f
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/vasishth80987/task-manager.git
+   cd task-manager
+   
+2. **Install Dependencies**
+
+   ```bash
+   composer install
+   npm install
+
+3. **Set Configurations in .env**
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   Change Mailtrap settings to check mail sent out by the app
+
+4. **Run Database Scripts**
+
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+
+5. **Start Server**
+
+   ```bash
+   php artisan serve
+   
