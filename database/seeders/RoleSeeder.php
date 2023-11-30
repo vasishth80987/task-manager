@@ -23,14 +23,5 @@ class RoleSeeder extends Seeder
         $managerRole->syncPermissions(['view tasks', 'create tasks', 'edit tasks', 'delete tasks',
             'view teams', 'create teams', 'edit teams', 'delete teams']);
         $userRole->syncPermissions(['view tasks', 'view teams']);
-
-        $users = User::all();
-        foreach ($users as $user) {
-            $user->assignRole('user');
-        }
-        User::find(1)->assignRole('admin');
-        User::find(2)->assignRole('manager');
-        User::find(3)->assignRole('manager');
-
     }
 }
