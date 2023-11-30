@@ -11,11 +11,12 @@
     - Update existing tasks
     - Delete tasks
 - User Roles and permissions:
-    - Tasks can only be created or updated by managers and admins
-    - Managers can only update or delete own tasks
-    - Managers and admins can assign other users to their tasks
-    - Users can view tasks that have been assigned to them
-    - Users can update task status for tasks they have been assigned to.
+    - Tasks can only be created, updated or deleted by managers and admins.
+    - Managers and admins can assign other users to tasks.
+    - Managers can only update or delete their own tasks.
+    - Users can only view tasks that have been assigned to them.
+    - Users can update task completion status for tasks they are assigned to.
+    - Laravel Policies used for authorizing user for all crud operations. 
 - Team Feature:
     - Managers and Admin can create teams
     - Managers can only assign tasks to users in the teams they lead
@@ -35,13 +36,20 @@
 - MySQL or a similar database system
 
 ###Dependencies
-- laravel/framework
-- spatie/laravel-permission
+- laravel/framework:
+      Best open source PHP framework for web based applications. 
+- spatie/laravel-permission:
+      Laravel Role & Permissions package with helper functions to create complex user authorisation groups.
 - yajra/laravel-datatables
+      Laravel package to display lists in tabular format with additional features such as search, excel sheet downloads, etc.
 - livewire/livewire
+      Dynamic UI components for laravel application to improve UX.
 - masmerise/livewire-toaster
+      UI elements for notifying user.
 - laravel/sanctum
+      Easy API authentication package for laravel.
 - pestphp/pest
+      Modern testing framework for laravel and php.
 
 ### Installation
 
