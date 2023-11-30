@@ -85,16 +85,16 @@
 ### Login Credentials ###
 **Admin** \
 email: admin@example.com \
-password: password \
+password: password 
 
 **Managers** \
 email: manager1@example.com \
 password: password \
 email: manager2@example.com \
-password: password \
+password: password 
 
 **Users** \
 email: dev1@example.com \
 password: password \
 email: dev2@example.com \
-password: password \
+password: password 
