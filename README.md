@@ -36,19 +36,19 @@
 - MySQL or a similar database system
 
 ###Dependencies
-- laravel/framework:
+- laravel/framework: 
       Best open source PHP framework for web based applications. 
-- spatie/laravel-permission:
+- spatie/laravel-permission: 
       Laravel Role & Permissions package with helper functions to create complex user authorisation groups.
-- yajra/laravel-datatables
+- yajra/laravel-datatables: 
       Laravel package to display lists in tabular format with additional features such as search, excel sheet downloads, etc.
-- livewire/livewire
+- livewire/livewire: 
       Dynamic UI components for laravel application to improve UX.
-- masmerise/livewire-toaster
+- masmerise/livewire-toaster: 
       UI elements for notifying user.
-- laravel/sanctum
+- laravel/sanctum: 
       Easy API authentication package for laravel.
-- pestphp/pest
+- pestphp/pest: 
       Modern testing framework for laravel and php.
 
 ### Installation
