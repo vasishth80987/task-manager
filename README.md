@@ -23,6 +23,8 @@
 - API endpoints:
     - RestAPI end points for all task operations(list,view,update,delete) can be accessed via '/api' suffix in url
     - Token based authentication using Laravel Sanctum Package
+- Feature Tests:
+    - Pest Php feature tests included
 
 ## Getting Started
 
@@ -73,6 +75,11 @@
 
    ```bash
     php artisan serve --host=localhost --port=80
+
+6. **Running Tests**
+
+   ```bash
+    php artisan test
 
 ### Login Credentials ###
 **Admin** \
