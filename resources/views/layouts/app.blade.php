@@ -12,8 +12,8 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <link href="{{assets('public/build/assets/app-5fcd5108.css')}}" rel="stylesheet" />
-        <script src="{{assets('public/build/assets/app-b219ee0b.js')}}" defer></script>
+        <link href="{{asset('public/build/assets/app-5fcd5108.css')}}" rel="stylesheet" />
+        <script src="{{asset('public/build/assets/app-b219ee0b.js')}}" defer></script>
         <!-- Scripts -->
 {{--        @vite(['resources/css/app.css', 'resources/js/app.js'])--}}
 

@@ -74,12 +74,13 @@
 5. **Start Server**
 
    ```bash
-    php artisan serve --host=localhost --port=80
+   php artisan serve --host=localhost --port=80
 
 6. **Running Tests**
 
    ```bash
-    php artisan test
+   php artisan migrate --database=testing 
+   php artisan test
 
 ### Login Credentials ###
 **Admin** \
