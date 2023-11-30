@@ -23,9 +23,9 @@ class TaskController extends Controller
     public function __construct()
     {
         // Applying permissions middleware to respective methods
-        $this->middleware('permission:view tasks')->only(['index', 'show']);
+        $this->middleware('permission:view tasks')->only(['edit', 'index', 'show']);
         $this->middleware('permission:create tasks')->only(['create', 'store']);
-        $this->middleware('permission:edit tasks')->only(['edit', 'update']);
+        $this->middleware('permission:edit tasks')->only(['update']);
         $this->middleware('permission:delete tasks')->only('destroy');
     }
 
